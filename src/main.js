@@ -5,12 +5,6 @@ import { Settings } from './settings.js'
 import { getSetting } from './utils.js'
 import { createRoot } from 'react-dom/client'
 
-const getModelDisplayName = (model) => {
-	return {
-		'gpt-3.5-turbo': 'GPT-3.5-Turbo',
-		'gpt-4': 'GPT-4',
-	}[model] ?? 'GPT';
-}
 const parseEventSource = (data) => {
 	const result = data
 		.split('\n\n')
@@ -32,7 +26,12 @@ const parseEventSource = (data) => {
 };
 
 const getGPTTranslation = async (originalLyrics, onStream, onDone) => {
-	const model = getSetting('model', 'gpt-3.5-turbo');
+	var model = "";
+	if (getSetting('api-type', 'custom') == 'custom') {
+		model = getSetting('custom-model', '');
+	} else {
+		model = getSetting('openai-model', '');
+	}
 	const encodedLyrics = originalLyrics.map((x, i) => `${i+1}. ${x.trim()}`).join('\n');
 	//console.log('encodedLyrics', encodedLyrics);
 	const stream = await getChatCompletionStream([
@@ -168,7 +167,7 @@ const onLyricsUpdate = async (e) => {
 		if (window.currentLyrics?.hash === hash) {
 			window.currentLyrics.lyrics = lyrics;
 			window.currentLyrics.amend = true;
-			window.currentLyrics.contributors.translation = { name: getModelDisplayName(model) };
+			window.currentLyrics.contributors.translation = { name: model };
 			document.dispatchEvent(new CustomEvent('lyrics-updated', {detail: window.currentLyrics}));
 		}
 		//console.log(fullGPTResponse);

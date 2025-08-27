@@ -51,10 +51,10 @@ export function Settings(props) {
 		}).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 	}, []);
 
-	const [ model, setModel ] = useState(getSetting('model', 'gpt-3.5-turbo'));
-	const [ apiType, setApiType ] = useState(getSetting('api-type', 'public'));
-	const [ apiEndpoint, setApiEndpoint ] = useState(getSetting('public-api-endpoint', 'https://chatgpt-api.shn.hk/v1/'));
-	const [ apiKey, setApiKey ] = useState(getSetting('api-key', ''));
+	const [ model, setModel ] = useState(getSetting('openai-model', 'gpt-3.5-turbo'));
+	const [ apiType, setApiType ] = useState(getSetting('api-type', 'custom'));
+	const [ apiEndpoint, setApiEndpoint ] = useState(getSetting('custom-url', 'https://example.api.endpoint.lol/v1/'));
+	const [ apiKey, setApiKey ] = useState(getSetting('custom-key', ''));
 
 	return (
 		<ThemeProvider theme={themes[theme]}>
@@ -63,61 +63,77 @@ export function Settings(props) {
 					<Typography gutterBottom>在没有中文翻译的歌词界面，点击右侧栏的 GPT 小图标以开始翻译</Typography>
 					<FormGroup>					
 						<Stack direction="column" spacing={2} alignItems="flex-start">
-							<FormControl fullWidth>
-								<InputLabel id="gpt-model">模型</InputLabel>
-								<Select
-									labelId="gpt-model"
-									defaultValue={model}
-									label="模型"
-									onChange={(e) => {
-										setModel(e.target.value);
-										setSetting('model', e.target.value);
-									}}
-								>
-									<MenuItem value={'gpt-3.5-turbo'}>GPT-3.5-turbo</MenuItem>
-									<MenuItem value={'gpt-4'}>GPT-4</MenuItem>
-								</Select>
-							</FormControl>
 							<FormControl style={{ width: 'fit-content' }}>
 								<FormLabel>API</FormLabel>
-								<RadioGroup	row defaultValue={getSetting('api-type', 'public')} onChange={(e) => {
+								<RadioGroup	row defaultValue={getSetting('api-type', 'custom')} onChange={(e) => {
 									setApiType(e.target.value);
 									setSetting('api-type', e.target.value);
 								}}>
-									<FormControlLabel value="public" control={<Radio />} label="Public API Endpoint" />
-									<FormControlLabel value="custom" control={<Radio />} label="API Key" />
+									<FormControlLabel value="custom" control={<Radio />} label="自定义API" />
+									<FormControlLabel value="openai" control={<Radio />} label="官方API Key" />
 								</RadioGroup>
 							</FormControl>
 							
 							{
-								apiType === 'public' &&
+								apiType === 'custom' &&
 									<TextField
-										label="Public API Endpoint URL"
+										label="自定义API服务商地址"
 										fullWidth
 										variant="filled"
-										defaultValue={getSetting('public-api-endpoint', 'https://chatgpt-api.shn.hk/v1/')}
+										defaultValue={getSetting('custom-url', 'https://chatgpt-api.shn.hk/v1/')}
 										onChange={(e) => {
 											setApiEndpoint(e.target.value);
-											setSetting('public-api-endpoint', e.target.value);
+											setSetting('custom-url', e.target.value);
 										}}
 										error={
 											!apiEndpoint.startsWith('https://') &&
 											!apiEndpoint.startsWith('http://')
 										}
-									/>
-							}
-							{
-								apiType === 'custom' &&
-									<TextField
-										label="API Key"
+									/> && <TextField
+										label="API密钥"
 										fullWidth
 										variant="filled"
-										defaultValue={getSetting('api-key', '')}
+										defaultValue={getSetting('custom-key', '')}
 										onChange={(e) => {
 											setApiKey(e.target.value);
-											setSetting('api-key', e.target.value);
+											setSetting('custom-key', e.target.value);
 										}}
-										error={!/^sk-[0-9A-Za-z]{48}$/.test(apiKey)}
+										error={false}
+									/> && <TextField
+										label="模型名"
+										fullWidth
+										variant="filled"
+										defaultValue={getSetting('custom-model', '')}
+										onChange={(e) => {
+											setApiKey(e.target.value);
+											setSetting('custom-model', e.target.value);
+										}}
+										error={false}
+									/>
+									
+							}		
+							{
+								apiType === 'openai' &&
+									<TextField
+										label="API密钥"
+										fullWidth
+										variant="filled"
+										defaultValue={getSetting('openai-key', '')}
+										onChange={(e) => {
+											setApiKey(e.target.value);
+											setSetting('openai-key', e.target.value);
+										}}
+										error={false}
+									/> && <TextField
+										label="模型名"
+										fullWidth
+										variant="filled"
+										defaultValue={getSetting('openai-model', '')}
+										onChange={(e) => {
+											setApiKey(e.target.value);
+											setSetting('openai-model', e.target.value);
+										}}
+										error={false}
 									/>
 							}
 
