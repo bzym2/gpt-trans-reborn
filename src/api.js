@@ -22,7 +22,7 @@ const getChatCompletionStreamCustomAPI = async (apiKey, messages, config = {pres
 			'Authorization': `Bearer ${apiKey}`
 		},
 		body: JSON.stringify({
-			model: getSetting('model', 'gpt-3.5-turbo'),
+			model: model,
 			messages,
 			...config,
 			stream: true
