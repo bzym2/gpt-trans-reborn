@@ -2,7 +2,7 @@
     "manifest_version": 1,
     "name": "GPT Trans Reborn",
     "slug": "GPTTransReborn",
-	"fork_of" : "GPTTrans",
+    "fork-of": "GPTTrans",
     "author": "bzym2",
     "author_links": ["https://github.com/bzym2"],
     "description": "使用GPT类API翻译歌词",

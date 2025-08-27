@@ -4,13 +4,17 @@ import { getSetting, setSetting } from './utils.js';
 // from https://github.com/ztjhz/chatgpt-free-app
 var url = 'https://api.openai.com/v1/chat/completions';
 var model = 'gpt-3.5-turbo';
-if (getSetting('api-type', 'custom') == 'custom') {
-	url = getSetting('custom-url', "https://api.openai.com/v1/chat/completions");
-	model = getSetting('custom-model', 'gpt-3.5-turbo');
-} else {
-	model = getSetting('openai-model', 'gpt-3.5-turbo')
-}
 const getChatCompletionStreamCustomAPI = async (apiKey, messages, config = {presence_penalty: 0, temperature: 1}) => {
+	if (getSetting('api-type', 'custom') == 'custom') {
+		url = getSetting('custom-url', "");
+		console.log("Custom " + url)
+		model = getSetting('custom-model', 'gpt-3.5-turbo');
+		console.log("Custom " + model)
+	} else {
+		model = getSetting('openai-model', 'gpt-3.5-turbo')
+		console.log("OAI " + url)
+		console.log("OAI " + model)
+	}
 	const response = await fetch(url, {
 		method: 'POST',
 		headers: {
