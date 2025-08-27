@@ -89,7 +89,11 @@ export function Settings(props) {
 											!apiEndpoint.startsWith('https://') &&
 											!apiEndpoint.startsWith('http://')
 										}
-									/> && <TextField
+									/> 
+									
+							}
+							{
+								apiType === "custom" && <TextField
 										label="API密钥"
 										fullWidth
 										variant="filled"
@@ -99,7 +103,10 @@ export function Settings(props) {
 											setSetting('custom-key', e.target.value);
 										}}
 										error={false}
-									/> && <TextField
+									/>
+							}
+							{
+								apiType === "custom" && <TextField
 										label="模型名"
 										fullWidth
 										variant="filled"
@@ -110,8 +117,7 @@ export function Settings(props) {
 										}}
 										error={false}
 									/>
-									
-							}		
+							}
 							{
 								apiType === 'openai' &&
 									<TextField
@@ -124,7 +130,10 @@ export function Settings(props) {
 											setSetting('openai-key', e.target.value);
 										}}
 										error={false}
-									/> && <TextField
+									/> 
+							}
+							{
+								apiType === 'openai' && <TextField
 										label="模型名"
 										fullWidth
 										variant="filled"
@@ -136,7 +145,6 @@ export function Settings(props) {
 										error={false}
 									/>
 							}
-
 							
 							<Button variant="outlined" onClick={async () => {
 								await betterncm.fs.mkdir('gpt-translated-lyrics');
